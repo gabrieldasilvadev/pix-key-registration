@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  pix_key_registration_postgresql:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pix_key_registration
+      - POSTGRES_USER=pix_key_registration
+      - POSTGRES_DB=pix_key_registration

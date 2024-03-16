@@ -1,0 +1,38 @@
+server:
+  port: 7050
+
+spring:
+  config:
+    import:
+      - optional:file:./secrets-local.properties
+  application:
+    name: pix-key-registration
+  datasource:
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
+    hikari:
+      maximum-pool-size: 10
+      data-source-properties:
+        ### https://jdbc.postgresql.org/documentation/use/#connection-parameters
+        reWriteBatchedInserts: true
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        generate_statistics: false
+        format_sql: false
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+    open-in-view: false
+  task:
+    execution:
+      pool:
+        queue-capacity: 10000
+  flyway:
+    url: ${database.url}
+    user: ${database.username}
+    password: ${database.password}
+    locations: db.migration
+    baseline-on-migrate: true

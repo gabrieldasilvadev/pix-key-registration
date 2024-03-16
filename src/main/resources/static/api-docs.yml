@@ -1,0 +1,231 @@
+openapi: 3.1.0
+x-stoplight:
+  id: yjnbwffd0qu02
+info:
+  title: pix-key-registration
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /persons/:
+    post:
+      summary: Create a person
+      operationId: post-persons
+      responses:
+        '200':
+          description: OK
+        '409':
+          description: Conflict
+          content: {}
+        '422':
+          description: Unprocessable Entity (WebDAV)
+        '500':
+          description: Internal Server Error
+      description: Create a person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePerson'
+    parameters: []
+  /accounts/:
+    post:
+      summary: Create a account
+      operationId: post-accounts
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+        '422':
+          description: Unprocessable Entity (WebDAV)
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccount'
+  /accounts/address/:
+    post:
+      summary: Register a person's address
+      operationId: post-accounts-address
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAddress'
+      description: Register a person's address
+    parameters: []
+  /accounts/pix/key:
+    post:
+      summary: ''
+      operationId: post-accounts-pix-key
+      responses:
+        '201':
+          description: Created
+      description: Register a PIX key to an account
+components:
+  schemas:
+    ErrorResponse:
+      x-stoplight:
+        id: 445dd9e62b3fb
+      type: object
+      properties:
+        type:
+          type: string
+          x-stoplight:
+            id: 3ygu1947hrl2s
+        message:
+          type: string
+          x-stoplight:
+            id: 6putycauf3kp6
+        details:
+          type: object
+          x-stoplight:
+            id: re2p1bzax65qx
+    PersonType:
+      title: PersonType
+      x-stoplight:
+        id: uui0ut9iuu2co
+      description: |-
+        Choice legal person or natural person.
+        Legal person use CNPJ and natural person use CPF
+      examples:
+        - LEGAL_PERSON
+        - NATURAL_PERSON
+      x-internal: true
+      type: string
+      enum:
+        - LEGAL_PERSON
+        - NATURAL_PERSON
+    CreatePerson:
+      title: CreatePerson
+      x-stoplight:
+        id: oq1u5lfsnr1zm
+      type: object
+      properties:
+        first_name:
+          type: string
+          x-stoplight:
+            id: y3jhr6pmp29r9
+        last_name:
+          type: string
+          x-stoplight:
+            id: vpt3dyg3jjlxc
+        birth_date:
+          type: string
+          x-stoplight:
+            id: rof6e3mtntbaq
+          format: date
+          example: '2003-05-15'
+        cellphone:
+          type: string
+          x-stoplight:
+            id: og18dchqopuhw
+          description: Define a cellphone for your person
+          example: '11944567890'
+        email:
+          type: string
+          x-stoplight:
+            id: far4dhj0ta46n
+          example: email@email.com
+          format: email
+        personal_document:
+          $ref: '#/components/schemas/PersonalDocument'
+          x-stoplight:
+            id: i0re69ftn9ek0
+          description: Define a personal document for your person. Choice between CPF for natural person or CNPJ for legal person
+        type:
+          $ref: '#/components/schemas/PersonType'
+          x-stoplight:
+            id: xt4r8jyn2oo0n
+      required:
+        - first_name
+        - last_name
+        - birth_date
+        - cellphone
+        - email
+        - personal_document
+        - type
+    PersonalDocument:
+      title: PersonalDocument
+      x-stoplight:
+        id: tr6f0dvuqws13
+      type: string
+      description: Define personal document for your person. Choice between CPF for natural person or CNPJ for legal person
+      examples: []
+      maxLength: 14
+      x-internal: true
+    CreateAccount:
+      title: CreateAccount
+      x-stoplight:
+        id: 3qxy30yp1lqkv
+      type: object
+      properties:
+        type:
+          type: string
+          x-stoplight:
+            id: 2jsi4wbmyxmsm
+        agency:
+          type: string
+          x-stoplight:
+            id: 3ma3qatcjk4po
+        person_id:
+          type: string
+          x-stoplight:
+            id: 9txb3wvnm86ue
+      required:
+        - type
+    CreateAddress:
+      title: CreateAddress
+      x-stoplight:
+        id: dwzimzkon52nb
+      type: object
+      properties:
+        postal_code:
+          type: string
+          x-stoplight:
+            id: q7qrwwj1l3w2r
+          pattern: '^\\d{5}-\\d{3}$|^\\d{8}$'
+          example: '03333010'
+          description: System used to identify specific locations for mail delivery
+        street:
+          type: string
+          x-stoplight:
+            id: jbsb6ydupfd6u
+          example: Rua Guapeva
+        city:
+          type: string
+          x-stoplight:
+            id: dj50yeln5pu7v
+          example: Sao Paulo
+        state:
+          type: string
+          x-stoplight:
+            id: upk3mc8kbr6rv
+          example: Sao Paulo
+        neighbourhood:
+          type: string
+          x-stoplight:
+            id: 4plewadon710t
+          example: Vila Regente Feijo
+        number:
+          type: string
+          x-stoplight:
+            id: kjj6y2rx1pp69
+          example: '140'
+          description: House number
+        complement:
+          type: string
+          x-stoplight:
+            id: m5rpqrvcbpdsh
+          example: 2A
+          description: This field is optional
+  requestBodies: {}
+  responses: {}
