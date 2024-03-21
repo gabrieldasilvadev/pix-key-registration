@@ -9,3 +9,11 @@ services:
       - POSTGRES_PASSWORD=pix_key_registration
       - POSTGRES_USER=pix_key_registration
       - POSTGRES_DB=pix_key_registration
+  pix_key_registration_wiremock:
+    image: "wiremock/wiremock:latest"
+    container_name: my_wiremock
+    volumes:
+      - ./extensions:/var/wiremock/extensions
+      - ./__files:/home/wiremock/__files
+      - ./mappings:/home/wiremock/mappings
+    entrypoint: [ "/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose" ]

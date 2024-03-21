@@ -66,7 +66,7 @@ configurations {
 tasks.compileJava { dependsOn("openApiGenerate") }
 openApiGenerate {
     generatorName.set("spring")
-    inputSpec.set("$rootDir/src/main/resources/static/api-docs.yml")
+    inputSpec.set("$rootDir/src/main/resources/static/api-docs.yaml")
     outputDir.set("$buildDir/generated/openapi")
     modelNameSuffix.set("Dto")
     configOptions.set(
@@ -86,6 +86,7 @@ openApiGenerate {
 sourceSets { getByName("main") { java { srcDir("$buildDir/generated/openapi/src/main/java") } } }
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -118,7 +119,11 @@ dependencies {
     implementation("javax.validation:validation-api:2.0.1.Final")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
 
+    // Cache
+    implementation("org.springframework.boot:spring-boot-starter-cache:3.2.3")
+
     // Others
+    implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")

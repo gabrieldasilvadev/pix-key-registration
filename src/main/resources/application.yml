@@ -36,3 +36,8 @@ spring:
     password: ${database.password}
     locations: db.migration
     baseline-on-migrate: true
+
+app:
+  account:
+    legal-person-limit-account: 5
+    natural-person-limit-account: 1
