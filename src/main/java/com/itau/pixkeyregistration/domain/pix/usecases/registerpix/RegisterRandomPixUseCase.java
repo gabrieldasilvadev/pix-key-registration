@@ -12,8 +12,6 @@ import de.huxhorn.sulky.ulid.ULID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class RegisterRandomPixUseCase {

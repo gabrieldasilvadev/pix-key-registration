@@ -5,12 +5,9 @@ import com.itau.pixkeyregistration.domain.gateways.InactivePixKeyStorageGateway;
 import com.itau.pixkeyregistration.domain.pix.PixKey;
 import com.itau.pixkeyregistration.domain.pix.inactive.PixKeyInactive;
 import com.itau.pixkeyregistration.infrastructure.outbound.persistence.jpa.entities.AccountTable;
-import com.itau.pixkeyregistration.infrastructure.outbound.persistence.jpa.entities.PixKeyTable;
 import com.itau.pixkeyregistration.infrastructure.outbound.persistence.jpa.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

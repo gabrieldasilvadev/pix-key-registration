@@ -7,7 +7,6 @@ import com.itau.pixkeyregistration.domain.exceptions.AccountAlreadyExistsExcepti
 import com.itau.pixkeyregistration.domain.exceptions.InvalidPersonTypeException;
 import com.itau.pixkeyregistration.domain.gateways.PersonStorageGateway;
 import com.itau.pixkeyregistration.domain.person.Person;
-import com.itau.pixkeyregistration.domain.person.enums.PersonType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

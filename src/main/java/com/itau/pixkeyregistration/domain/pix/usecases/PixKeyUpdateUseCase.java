@@ -1,6 +1,5 @@
 package com.itau.pixkeyregistration.domain.pix.usecases;
 
-import com.itau.pixkeyregistration.application.web.dto.PixKeyUpdateRequestDto;
 import com.itau.pixkeyregistration.domain.gateways.PixKeyUpdateGateway;
 import com.itau.pixkeyregistration.domain.gateways.PixStorageGateway;
 import com.itau.pixkeyregistration.domain.pix.PixKey;

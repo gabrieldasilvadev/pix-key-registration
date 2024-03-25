@@ -7,7 +7,6 @@ import com.itau.pixkeyregistration.domain.pix.enums.PixKeyStatus;
 import com.itau.pixkeyregistration.domain.pix.enums.PixKeyType;
 import com.itau.pixkeyregistration.domain.valueobjects.Email;
 import com.itau.pixkeyregistration.domain.valueobjects.PersonalDocument;
-import de.huxhorn.sulky.ulid.ULID;
 import lombok.Getter;
 
 import java.util.UUID;
