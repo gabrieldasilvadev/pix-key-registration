@@ -2,12 +2,12 @@ package com.itau.pixkeyregistration.domain.gateways;
 
 import com.itau.pixkeyregistration.domain.person.Person;
 
-import java.util.Optional;
-
 public interface PersonStorageGateway {
-    Person save(Person person);
+    void save(Person person);
 
-    Optional<Person> getById(String personId);
+    Person findById(String personId);
 
-    Optional<Person> getPersonalDocument(String personalDocument);
+    Person getPersonalDocument(String personalDocument);
+
+    boolean personExists(String personalDocument);
 }

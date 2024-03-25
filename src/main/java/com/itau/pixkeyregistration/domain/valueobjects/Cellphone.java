@@ -1,13 +1,12 @@
 package com.itau.pixkeyregistration.domain.valueobjects;
 
 import com.itau.pixkeyregistration.domain.exceptions.InvalidCellphoneException;
-import lombok.Builder;
 
 import java.util.regex.Pattern;
 
-@Builder
 public record Cellphone(String value) {
-    public Cellphone {
+    public Cellphone(String value) {
+        this.value = value;
         validateCellphone();
     }
 
@@ -16,7 +15,7 @@ public record Cellphone(String value) {
     }
 
     private void isValidPattern() {
-        String REGEX_CELLPHONE_PATTERN = "^\\(?([1-9]{2})\\)?(9)?([0-9]{4})-?([0-9]{4})$";
+        String REGEX_CELLPHONE_PATTERN = "^\\+?(\\d{1,3})? ?\\(?([1-9]{2})\\)?(9)?([0-9]{4})-?([0-9]{4})$";
         if (!Pattern.matches(REGEX_CELLPHONE_PATTERN, this.value)) {
             throw new InvalidCellphoneException(
                     "INVALID_CELLPHONE",

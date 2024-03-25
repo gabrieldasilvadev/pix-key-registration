@@ -2,13 +2,12 @@ package com.itau.pixkeyregistration.domain.valueobjects;
 
 import com.itau.pixkeyregistration.domain.exceptions.InvalidEmailException;
 import com.itau.pixkeyregistration.domain.exceptions.InvalidPasswordException;
-import lombok.Builder;
 
 import java.util.regex.Pattern;
 
-@Builder
 public record Password(String value) {
-    public Password {
+    public Password(String value) {
+        this.value = value;
         validatePassword();
     }
 

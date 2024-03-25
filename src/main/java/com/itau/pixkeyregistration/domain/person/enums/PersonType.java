@@ -4,15 +4,12 @@ public enum PersonType {
     LEGAL_PERSON, NATURAL_PERSON;
 
     public static PersonType getByPersonalDocument(String personalDocument) {
-        if (personalDocument.matches(REGEX_NATURAL_PERSON)) {
+        if (personalDocument.length() == 11) {
             return NATURAL_PERSON;
-        } else if (personalDocument.matches(REGEX_LEGAL_PERSON)) {
+        } else if (personalDocument.length() == 14) {
             return LEGAL_PERSON;
         } else {
-            throw new IllegalArgumentException("Documento pessoal inválido");
+            throw new IllegalArgumentException("Invalid personal document");
         }
     }
-
-    private static final String REGEX_NATURAL_PERSON = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}";
-    private static final String REGEX_LEGAL_PERSON = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}";
 }

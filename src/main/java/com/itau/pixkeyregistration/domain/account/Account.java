@@ -2,48 +2,64 @@ package com.itau.pixkeyregistration.domain.account;
 
 import com.itau.pixkeyregistration.domain.account.enums.AccountStatus;
 import com.itau.pixkeyregistration.domain.account.enums.AccountType;
+import com.itau.pixkeyregistration.domain.exceptions.AccountNumberExceededLimit;
 import com.itau.pixkeyregistration.domain.exceptions.InvalidAccountStatusException;
 import com.itau.pixkeyregistration.domain.exceptions.InvalidAccountTypeException;
 import com.itau.pixkeyregistration.domain.exceptions.InvalidAgencyException;
-import com.itau.pixkeyregistration.domain.valueobjects.Address;
-import com.itau.pixkeyregistration.domain.valueobjects.Password;
+import com.itau.pixkeyregistration.domain.person.enums.PersonType;
+import com.itau.pixkeyregistration.domain.pix.PixKey;
 import com.itau.pixkeyregistration.domain.valueobjects.Email;
-import de.huxhorn.sulky.ulid.ULID;
+import com.itau.pixkeyregistration.domain.valueobjects.Password;
+import com.itau.pixkeyregistration.domain.valueobjects.PersonalDocument;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class Account {
-    private final String id = new ULID().nextULID();
+    private String id;
     private String agencyNumber;
-    private Integer agencyLastDigit;
     private Email email;
     private Password password;
     private String personId;
     private AccountType type;
-    private AccountStatus status = AccountStatus.IN_ACTIVATION;
-    private String personalDocument;
-    private Address address;
+    private AccountStatus status = AccountStatus.ACTIVE;
+    private PersonalDocument personalDocument;
+    private String number;
+    private Set<PixKey> pixKeys;
 
     public Account() {
-        validateAccount();
+        this.pixKeys = new HashSet<>();
     }
 
-    private String getAgency() {
-        return String.format("%s-%s", this.agencyNumber, this.agencyLastDigit);
+    public void addPixKey(PixKey pixKey, PersonType personType) {
+        int maxKeys = personType == PersonType.LEGAL_PERSON ? 20 : 5;
+
+        if (!pixKeys.add(pixKey)) {
+            throw new RuntimeException("PIX key already registered.");
+        }
+
+        if (pixKeys.size() >= maxKeys) {
+            throw new RuntimeException("Pix key limit exceeded");
+        }
+
+        pixKeys.add(pixKey);
     }
 
-    public void addAddress(Address address) {
-        this.address = address;
+    public PixKey getPixKeyByType(String pixKeyType) {
+        return this.pixKeys.stream().filter(px -> px.getByType(pixKeyType) != null)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     private void validateAccount() {
         isValidType();
         isValidStatus();
         isValidAgencyNumber();
+        validateAccountNumber();
     }
 
     private void isValidType() {
@@ -77,16 +93,27 @@ public class Account {
         }
     }
 
+    private void validateAccountNumber() {
+        if (this.number.length() > 8) {
+            throw new AccountNumberExceededLimit(
+                    "ACCOUNT_NUMBER_EXCEEDED_LIMIT",
+                    "Account number exceeded the 8 character limit"
+            );
+        }
+    }
+
 
     public static final class AccountBuilder {
+        private String id;
         private String agencyNumber;
-        private Integer agencyLastDigit;
         private Email email;
         private Password password;
         private String personId;
         private AccountType type;
         private AccountStatus status;
-        private String personalDocument;
+        private PersonalDocument personalDocument;
+        private String number;
+        private HashSet<PixKey> pixKeys;
 
         private AccountBuilder() {
         }
@@ -95,13 +122,13 @@ public class Account {
             return new AccountBuilder();
         }
 
-        public AccountBuilder aAgencyNumber(String agencyNumber) {
-            this.agencyNumber = agencyNumber;
+        public AccountBuilder aId(String id) {
+            this.id = id;
             return this;
         }
 
-        public AccountBuilder aAgencyLastDigit(Integer agencyLastDigit) {
-            this.agencyLastDigit = agencyLastDigit;
+        public AccountBuilder aAgencyNumber(String agencyNumber) {
+            this.agencyNumber = agencyNumber;
             return this;
         }
 
@@ -130,21 +157,34 @@ public class Account {
             return this;
         }
 
-        public AccountBuilder aPersonalDocument(String personalDocument) {
+        public AccountBuilder aPersonalDocument(PersonalDocument personalDocument) {
             this.personalDocument = personalDocument;
+            return this;
+        }
+
+        public AccountBuilder aNumber(String number) {
+            this.number = number;
+            return this;
+        }
+
+        public AccountBuilder aPixKeys(HashSet<PixKey> pixKeys) {
+            this.pixKeys = pixKeys;
             return this;
         }
 
         public Account build() {
             Account account = new Account();
-            account.agencyLastDigit = this.agencyLastDigit;
+            account.agencyNumber = this.agencyNumber;
+            account.number = this.number;
             account.personalDocument = this.personalDocument;
-            account.email = this.email;
-            account.personId = this.personId;
+            account.pixKeys = this.pixKeys;
             account.password = this.password;
             account.type = this.type;
-            account.agencyNumber = this.agencyNumber;
+            account.id = this.id;
+            account.personId = this.personId;
+            account.email = this.email;
             account.status = this.status;
+            account.validateAccount();
             return account;
         }
     }

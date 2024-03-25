@@ -6,27 +6,31 @@ import com.itau.pixkeyregistration.domain.exceptions.InvalidPersonNameException;
 import com.itau.pixkeyregistration.domain.exceptions.InvalidPersonTypeException;
 import com.itau.pixkeyregistration.domain.person.enums.PersonType;
 import com.itau.pixkeyregistration.domain.valueobjects.Cellphone;
-import de.huxhorn.sulky.ulid.ULID;
+import com.itau.pixkeyregistration.domain.valueobjects.PersonalDocument;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
 
 @Getter
 public class Person {
-    private final String id = new ULID().nextULID();
+    private String id;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
+    @Enumerated(EnumType.STRING)
     private PersonType type;
     private Cellphone cellphone;
-    private String personalDocument;
-    private final List<Account> accounts;
+    private PersonalDocument personalDocument;
+    private HashSet<Account> accounts;
 
     public Person() {
-        validatePerson();
-        accounts = new ArrayList<>();
+        accounts = new HashSet<>();
     }
 
     public int getAge() {
@@ -101,12 +105,14 @@ public class Person {
 
 
     public static final class PersonBuilder {
+        private String id;
         private String firstName;
         private String lastName;
         private LocalDate birthDate;
         private PersonType type;
         private Cellphone cellphone;
         private String personalDocument;
+        private HashSet<Account> accounts;
 
         private PersonBuilder() {
         }
@@ -114,6 +120,12 @@ public class Person {
         public static PersonBuilder aPerson() {
             return new PersonBuilder();
         }
+
+        public PersonBuilder aId(String id) {
+            this.id = id;
+            return this;
+        }
+
 
         public PersonBuilder aFirstName(String firstName) {
             this.firstName = firstName;
@@ -136,7 +148,7 @@ public class Person {
         }
 
         public PersonBuilder aCellphone(Cellphone cellphone) {
-            this.cellphone = cellphone;
+            this.cellphone = new Cellphone(cellphone.value());
             return this;
         }
 
@@ -145,14 +157,23 @@ public class Person {
             return this;
         }
 
+        public PersonBuilder aAccounts(HashSet<Account> accounts) {
+            this.accounts = accounts;
+            return this;
+        }
+
         public Person build() {
             Person person = new Person();
+            person.id = this.id;
+            person.personalDocument = new PersonalDocument(this.personalDocument);
             person.firstName = this.firstName;
-            person.lastName = this.lastName;
-            person.type = this.type;
             person.birthDate = this.birthDate;
-            person.personalDocument = this.personalDocument;
+            person.type = this.type;
             person.cellphone = this.cellphone;
+            person.lastName = this.lastName;
+            person.accounts = this.accounts;
+
+            person.validatePerson();
             return person;
         }
     }

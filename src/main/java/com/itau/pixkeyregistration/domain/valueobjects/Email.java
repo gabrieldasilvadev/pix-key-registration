@@ -1,17 +1,17 @@
 package com.itau.pixkeyregistration.domain.valueobjects;
 
 import com.itau.pixkeyregistration.domain.exceptions.InvalidEmailException;
-import lombok.Builder;
 
 import java.util.regex.Pattern;
 
-@Builder
 public record Email(String value) {
-    public Email {
+    public Email(String value) {
+        this.value = value;
         validateEmail();
     }
 
-    private void validateEmail() {
+    public void validateEmail() {
+        exceededCharactersNumber();
         isValidPattern();
     }
 
@@ -21,6 +21,15 @@ public record Email(String value) {
             throw new InvalidEmailException(
                     "INVALID_EMAIL",
                     "The email provided is not valid"
+            );
+        }
+    }
+
+    private void exceededCharactersNumber() {
+        if (this.value.length() > 77) {
+            throw new InvalidEmailException(
+                    "INVALID_EMAIL",
+                    "Email exceeded character limit"
             );
         }
     }

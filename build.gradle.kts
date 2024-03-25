@@ -11,7 +11,7 @@ java {
 
 plugins {
     java
-    id("org.springframework.boot") version "3.2.3"
+    id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.openapi.generator") version "6.6.0"
 }
@@ -70,17 +70,18 @@ openApiGenerate {
     outputDir.set("$buildDir/generated/openapi")
     modelNameSuffix.set("Dto")
     configOptions.set(
-        mapOf(
-            "dateLibrary" to "java8",
-            "gradleBuildFile" to "false",
-            "basePackage" to "$basePackage.application.web.api",
-            "apiPackage" to "$basePackage.application.web.api",
-            "modelPackage" to "$basePackage.application.web.dto",
-            "interfaceOnly" to "true",
-            "hideGenerationTimestamp" to "true",
-            "openApiNullable" to "false",
-            "useTags" to "true"
-        )
+            mapOf(
+                    "dateLibrary" to "java8",
+                    "gradleBuildFile" to "false",
+                    "basePackage" to "$basePackage.application.web.api",
+                    "apiPackage" to "$basePackage.application.web.api",
+                    "modelPackage" to "$basePackage.application.web.dto",
+                    "interfaceOnly" to "true",
+                    "hideGenerationTimestamp" to "true",
+                    "openApiNullable" to "false",
+                    "useTags" to "true",
+                    "useJakartaEe" to "true"
+            )
     )
 }
 sourceSets { getByName("main") { java { srcDir("$buildDir/generated/openapi/src/main/java") } } }
@@ -108,26 +109,22 @@ dependencies {
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
     archTestImplementation("com.tngtech.archunit:archunit:1.2.1")
 
     // Swagger
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.openapitools:jackson-databind-nullable:0.2.6")
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.15")
-    compileOnly("io.swagger:swagger-annotations:1.6.8")
-    compileOnly("io.springfox:springfox-core:3.0.0")
-    implementation("javax.validation:validation-api:2.0.1.Final")
-    implementation("javax.annotation:javax.annotation-api:1.3.2")
-
-    // Cache
-    implementation("org.springframework.boot:spring-boot-starter-cache:3.2.3")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+    implementation("io.swagger.core.v3:swagger-annotations:2.2.20")
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 
     // Others
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
-    compileOnly("javax.servlet:servlet-api:2.5")
 }
 
 tasks.withType<Test> {

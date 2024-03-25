@@ -2,39 +2,37 @@ package com.itau.pixkeyregistration.domain.account.usecases.create;
 
 import com.itau.pixkeyregistration.domain.account.Account;
 import com.itau.pixkeyregistration.domain.account.enums.AccountType;
+import com.itau.pixkeyregistration.domain.account.enums.PersonalDocumentTypeEnum;
 import com.itau.pixkeyregistration.domain.exceptions.AccountAlreadyExistsException;
 import com.itau.pixkeyregistration.domain.exceptions.InvalidPersonTypeException;
-import com.itau.pixkeyregistration.domain.exceptions.PersonNotFoundException;
-import com.itau.pixkeyregistration.domain.gateways.AccountStorageGateway;
 import com.itau.pixkeyregistration.domain.gateways.PersonStorageGateway;
 import com.itau.pixkeyregistration.domain.person.Person;
 import com.itau.pixkeyregistration.domain.person.enums.PersonType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CreateSavingsAccountUseCase {
-
-    private final AccountStorageGateway accountStorage;
     private final PersonStorageGateway personStorage;
 
     public Account create(Account account) {
-        Person person = personStorage.getById(account.getPersonId())
-                .orElseThrow(() -> new PersonNotFoundException(
-                        "PERSON_NOT_FOUND",
-                        String.format("The given person does not exist with PersonId[%s]", account.getPersonId())
-                ));
-        validatePersonType(person);
-        List<Account> accounts = accountStorage.getByPersonalDocument(account.getPersonalDocument());
-        validateSavingsAccountCreation(accounts, person);
-        return accountStorage.save(account);
+        Person person = personStorage.findById(account.getPersonId());
+        validateCustomerCanCreateAccount(person);
+        person.addAccount(account);
+        personStorage.save(person);
+        return account;
     }
 
-    private static void validatePersonType(Person person) {
-        if (person.getType().equals(PersonType.LEGAL_PERSON)) {
+    private void validateCustomerCanCreateAccount(Person person) {
+        validatePersonType(person);
+        validateSavingsAccountCreation(person);
+    }
+
+    private void validatePersonType(Person person) {
+        PersonalDocumentTypeEnum personalDocumentType = person.getPersonalDocument().getType();
+        boolean isLegalPerson = personalDocumentType.equals(PersonalDocumentTypeEnum.CNPJ);
+        if (isLegalPerson) {
             throw new InvalidPersonTypeException(
                     "INVALID_PERSON_TYPE",
                     String.format(
@@ -45,8 +43,8 @@ public class CreateSavingsAccountUseCase {
         }
     }
 
-    private void validateSavingsAccountCreation(List<Account> accounts, Person person) {
-        boolean hasSavingsAccount = accounts.stream()
+    private void validateSavingsAccountCreation(Person person) {
+        boolean hasSavingsAccount = person.getAccounts().stream()
                 .anyMatch(a -> a.getType().name().equals(AccountType.POUPANCA.name()));
         if (hasSavingsAccount) {
             throw new AccountAlreadyExistsException(

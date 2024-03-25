@@ -5,7 +5,7 @@ info:
 servers:
   - url: 'http://localhost:7050'
 paths:
-  /persons/:
+  /persons:
     post:
       summary: Create a person
       operationId: create-person
@@ -71,21 +71,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatePersonRequest'
-            examples:
-              Example 1:
-                value:
-                  first_name: string
-                  last_name: string
-                  birth_date: '2019-08-24'
-                  cellphone: string
-                  email: email@example.com
-                  personal_document: '23057061893'
-                  person_type: LEGAL_PERSON
+            examples: {}
         description: ''
       tags:
         - Person
     parameters: []
-  /accounts/:
+  /accounts:
     post:
       summary: Create a account
       operationId: create-account
@@ -96,17 +87,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateAccountResponse'
-              examples:
-                Example 1:
-                  value:
-                    account_id: 449e7a5c-69d3-4b8a-aaaf-5c9b713ebc65
-                    person_id: 087e858e-473c-4f50-b5b0-c1df6c021550
-                    first_name: string
-                    last_name: string
-                    agency: '0001'
-                    account_type: CORRENTE
-                    person_type: LEGAL_PERSON
-                    status: ACTIVE
         '400':
           description: Bad Request
           content:
@@ -161,371 +141,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateAccountRequest'
-            examples:
-              Example 1:
-                value:
-                  agency: '0001'
-                  password: Pass133!
-                  person_id: 087e858e-473c-4f50-b5b0-c1df6c021550
-                  account_type: CORRENTE
+            examples: {}
         description: ''
       tags:
         - Account
       description: Create a account
-  /accounts/address/:
-    post:
-      summary: Register a person's address
-      operationId: create-account-address
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateAddressResponse'
-              examples:
-                Example 1:
-                  value:
-                    postal_code: '03333010'
-                    person_id: 087e858e-473c-4f50-b5b0-c1df6c021550
-                    account_details:
-                      account_id: 449e7a5c-69d3-4b8a-aaaf-5c9b713ebc65
-                      first_name: string
-                      last_name: string
-                      account_number: 8
-                      account_type: CORRENTE
-                      agency: '0001'
-                    city: string
-                    state: string
-                    neighbourhood: string
-                    number: string
-                    complement: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-create-address-to-account-invalid-params:
-                  value:
-                    type: ADDRESS_INVALID_PARAMS
-                    message: This params is not valid to process
-                    details: {}
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-account-not-found:
-                  value:
-                    type: ACCOUNT_NOT_FOUND
-                    message: The given account is not exists
-                    details:
-                      account_id: 01HS77HQXG51HXVZ92DAWR6T72
-        '422':
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-create-address-to-account-interrupted:
-                  value:
-                    type: ADDRESS_CREATION_INTERRUPTED
-                    message: The process of registering an address to an account has been interrupted
-                    details:
-                      account_id: 01HS77S48D1R0C156BXQ7FKB6P
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-internal-server-error:
-                  value:
-                    type: INTERNAL_SERVER_ERROR
-                    message: Internal Server Error
-                    details: {}
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAddressRequest'
-            examples: {}
-      description: Register a person's address
-      tags:
-        - Account
     parameters: []
-  /accounts/pix/key/:
-    post:
-      summary: Registering a PIX key in an account
-      operationId: create-account-pix-key
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PixKeyRegistrationResponse'
-              examples:
-                Example 1:
-                  value:
-                    key_type: CNPJ
-                    key_value: string
-                    account_details:
-                      account_id: 449e7a5c-69d3-4b8a-aaaf-5c9b713ebc65
-                      first_name: string
-                      last_name: string
-                      account_number: 8
-                      account_type: CORRENTE
-                      agency: '0001'
-                    status: ACTIVE
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-registering-pix-key-invalid-params:
-                  value:
-                    type: REGISTERING_PIX_KEY_INVALID_PARAMS
-                    message: This params is not valid to process
-                    details:
-                      account_id: 01HS79AXV55J84XZGCGQ1BZFCE
-                      key_type: EMAIL
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-account-not-found-when-registering-pix-key:
-                  value:
-                    type: ACCOUNT_NOT_FOUND
-                    message: Not found account when registering PIX key
-                    details:
-                      account_id: 01HS793W2H24JVWHQSDJFWG54A
-        '422':
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-registering-pix-key-interrupted:
-                  value:
-                    type: REGISTERING_PIX_KEY_INTERRUPTED
-                    message: The process of registering an PIX key to an account has been interrupted
-                    details:
-                      account_id: 01HS79AXV55J84XZGCGQ1BZFCE
-                      key_type: EMAIL
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-internal-server-error:
-                  value:
-                    type: INTERNAL_SERVER_ERROR
-                    message: Internal Server Error
-                    details: {}
-      description: Register a PIX key to an account
-      tags:
-        - Account
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PixKeyRegistrationRequest'
-            examples:
-              Example 1:
-                value:
-                  type: CNPJ
-                  key_value: string
-                  agency: '0001'
-                  account_details:
-                    first_name: string
-                    last_name: string
-                    account_number: 8
-                    account_type: CORRENTE
-        description: ''
-    parameters: []
-  /accounts/pix/key/update/:
-    put:
-      summary: Update a PIX key in an account
-      operationId: update-account-pix-key
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PixKeyUpdateResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-update-pix-key-invalid-params:
-                  value:
-                    type: UPDATE_PIX_KEY_INVALID_PARAMS
-                    message: The given params is not valid for update PIX key
-                    details:
-                      account_id: 01HS7AQWRYZDT20MQ7XM0SYG6Q
-                      key_type: CPF
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-update-pix-key-account-not-found:
-                  value:
-                    type: ACCOUNT_NOT_FOUND
-                    message: Not found account when update PIX key
-                    details:
-                      account_id: 01HS7AQWRYZDT20MQ7XM0SYG6Q
-                      key_type: CPF
-        '422':
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-update-pix-key-interrupted:
-                  value:
-                    type: UPDATE_PIX_KEY_INTERRUPTED
-                    message: The process of update an PIX key to an account has been interrupted
-                    details:
-                      account_id: 01HS7AQWRYZDT20MQ7XM0SYG6Q
-                      key_type: CPF
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-internal-server-error:
-                  value:
-                    type: INTERNAL_SERVER_ERROR
-                    message: Internal Server Error
-                    details: {}
-      description: Update the value of a registered key
-      tags:
-        - Account
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PixKeyUpdateAccountRequest'
-            examples: {}
-        description: ''
-    parameters: []
-  '/accounts/pix/key/{key_id}/':
-    delete:
-      summary: Inactive a PIX key
-      operationId: inactivate-accounts-pix-key
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InactivePixKeyResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-inactive-pix-key-invalid-params:
-                  value:
-                    type: INACTIVE_PIX_KEY_INVALID_PARAMS
-                    message: The given params is not valid for inactive PIX key
-                    details:
-                      account_id: 01HS7B7MY0ZPVWWSRTNPKG7Z0C
-                      key_type: CNPJ
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-inactive-key-id-account-not-found:
-                  value:
-                    type: ACCOUNT_NOT_FOUND
-                    message: Not found account when inactive PIX key
-                    details:
-                      account_id: 01HS7B7MY0ZPVWWSRTNPKG7Z0C
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-pix-key-already-inactive:
-                  value:
-                    type: INACTIVE_PIX_KEY_CONFLICT
-                    message: This PIX key is already inactive
-                    details:
-                      account_id: 01HS7B7MY0ZPVWWSRTNPKG7Z0C
-                      key_type: CNPJ
-        '422':
-          description: Unprocessable Entity (WebDAV)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-inactive-pix-key-interrupted:
-                  value:
-                    type: INACTIVE_PIX_KEY_INTERRUPTED
-                    message: The process of inactive an PIX key to an account has been interrupted
-                    details:
-                      account_id: 01HS7B7MY0ZPVWWSRTNPKG7Z0C
-                      key_type: CNPJ
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                example-internal-server-error:
-                  value:
-                    type: INTERNAL_SERVER_ERROR
-                    message: Internal Server Error
-                    details: {}
-      description: ''
-      tags:
-        - Account
+  '/pix/keys/{id}':
     parameters:
       - schema:
           type: string
-        name: key_id
-        in: path
-        required: true
-  '/pix/keys/{key_id}':
-    parameters:
-      - schema:
-          type: string
-        name: key_id
+        name: id
         in: path
         required: true
     get:
@@ -579,11 +205,11 @@ paths:
                     details: {}
       operationId: get-account-pix-key-by-key_id
       description: 'Returns PIX key details based on a specific ID. {key_id} must be replaced by the actual ID of the PIX key'
-  '/pix/keys/{key_type}/':
+  '/pix/keys/{type}':
     parameters:
       - schema:
           type: string
-        name: key_type
+        name: type
         in: path
         required: true
     get:
@@ -597,21 +223,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPixKeyResponse'
-              examples:
-                Example 1:
-                  value:
-                    key_id: 1e779c8a-6786-4c89-b7c3-a6666f5fd6b5
-                    key_type: CNPJ
-                    key_value: string
-                    account_details:
-                      account_id: 449e7a5c-69d3-4b8a-aaaf-5c9b713ebc65
-                      first_name: string
-                      last_name: string
-                      account_number: 8
-                      account_type: CORRENTE
-                      agency: '0001'
-                    key_added_at: '2019-08-24T14:15:22Z'
-                    key_deactivated_at: '2019-08-24T14:15:22Z'
+              examples: {}
         '404':
           description: Not Found
           content:
@@ -652,7 +264,7 @@ paths:
                     details: {}
       operationId: get-account-pix-key-by-key_type
       description: 'Returns a list of PIX keys filtered by a specific type. {key_type} must be replaced by the actual type of the PIX key (e.g. EMAIL, CPF, CNPJ, CELULAR, ALEATORIO.).'
-  /pix/keys/account/:
+  /pix/keys/account:
     get:
       summary: Get PIX key by agency and account
       tags:
@@ -765,7 +377,7 @@ paths:
                     details: {}
       operationId: get-pix-keys-byr-consumer-name
       description: 'Returns a list of PIX keys associated with an account name. {account_name} must be replaced by the  consumer real name.'
-  /pix/keys/added/:
+  /pix/keys/added:
     get:
       summary: Get the PIX key by date added
       tags:
@@ -818,7 +430,7 @@ paths:
       operationId: get-pix-keys-by-date-added
       description: Returns a list of PIX keys included between the specified dates. The dateFrom and dateTo parameters (start and end dates) must be passed in the URL.
     parameters: []
-  /pix/keys/deactivated/:
+  /pix/keys/deactivated:
     get:
       summary: Get the PIX key by deactivation date
       tags:
@@ -871,44 +483,63 @@ paths:
       operationId: get-pix-keys-by-date-deactivated
       description: Returns a list of PIX keys that were inactivated between the specified dates. The dateFrom and dateTo parameters must be passed in the URL.
     parameters: []
+  /pix/keys:
+    post:
+      summary: Registering a PIX key in an account
+      operationId: register-key
+      responses:
+        '201':
+          description: Created
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PixKeyRegistrationRequest'
+      description: Registering a PIX key in an account
+      tags:
+        - PIX
+    parameters: []
+    put:
+      summary: Update Pix Key
+      operationId: update-pix-key
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PixKeyUpdateResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PixKeyUpdateRequest'
+      tags:
+        - PIX
+  '/pix/keys/{key_id}':
+    parameters:
+      - schema:
+          type: string
+        name: key_id
+        in: path
+        required: true
+    delete:
+      summary: Inactive Pix Key
+      operationId: inactive-key
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InactivePixKeyResponse'
+              examples: {}
+      description: ''
+      tags:
+        - PIX
 components:
   schemas:
-    CreateAddressRequest:
-      title: CreateAddress
-      type: object
-      properties:
-        postal_code:
-          $ref: '#/components/schemas/PostalCode'
-        street:
-          type: string
-          example: Rua Guapeva
-        city:
-          type: string
-          example: Sao Paulo
-        state:
-          type: string
-          example: Sao Paulo
-        neighbourhood:
-          type: string
-          example: Vila Regente Feijo
-        number:
-          type: string
-          example: 140
-          description: House number
-        complement:
-          type: string
-          example: 2A
-          description: This field is optional
-        account_id:
-          $ref: '#/components/schemas/Ulid'
-      required:
-        - postal_code
-        - street
-        - city
-        - state
-        - neighbourhood
-        - number
-        - complement
     PixKeyRegistrationRequest:
       title: PixKeyRegistration
       type: object
@@ -925,20 +556,6 @@ components:
       required:
         - type
         - key_value
-        - agency
-        - account_details
-    PixKeyUpdateAccountRequest:
-      title: PixKeyUpdateAccount
-      type: object
-      properties:
-        key_id:
-          $ref: '#/components/schemas/Ulid'
-        agency:
-          $ref: '#/components/schemas/Agency'
-        account_details:
-          $ref: '#/components/schemas/AccountDetailsRequest'
-      required:
-        - key_id
         - agency
         - account_details
     CreatePersonRequest:
@@ -975,8 +592,6 @@ components:
       properties:
         agency_number:
           $ref: '#/components/schemas/Agency'
-        agency_last_digit:
-          type: integer
         password:
           $ref: '#/components/schemas/Password'
         person_id:
@@ -989,7 +604,6 @@ components:
           $ref: '#/components/schemas/PersonalDocument'
       required:
         - agency_number
-        - agency_last_digit
         - password
         - person_id
         - account_type
@@ -1027,34 +641,12 @@ components:
         - key_value
         - agency
         - account_details
-    PixKeyUpdateResponse:
-      title: PixKeyUpdateResponse
-      type: object
-      properties:
-        key_id:
-          $ref: '#/components/schemas/Ulid'
-        key_type:
-          $ref: '#/components/schemas/PixKeyType'
-        key_value:
-          type: string
-          maxLength: 77
-        account_details:
-          $ref: '#/components/schemas/AccountDetailsResponse'
-        created_at:
-          $ref: '#/components/schemas/DateTime'
-      required:
-        - key_id
-        - key_type
-        - key_value
-        - account_details
-        - created_at
     CreatePersonResponse:
       title: CreatePersonResponse
       type: object
       properties:
         person_id:
           $ref: '#/components/schemas/Ulid'
-          description: Unique identifier for the person
         first_name:
           type: string
         last_name:
@@ -1069,36 +661,6 @@ components:
         - last_name
         - person_type
         - birth_date
-    CreateAddressResponse:
-      title: CreateAddressResponse
-      type: object
-      description: Response payload after adding an address to a person
-      properties:
-        postal_code:
-          $ref: '#/components/schemas/PostalCode'
-        person_id:
-          $ref: '#/components/schemas/Ulid'
-          description: Unique identifier for the person
-        account_details:
-          $ref: '#/components/schemas/AccountDetailsResponse'
-        city:
-          type: string
-        state:
-          type: string
-        neighbourhood:
-          type: string
-        number:
-          type: string
-        complement:
-          type: string
-      required:
-        - postal_code
-        - person_id
-        - account_details
-        - city
-        - state
-        - neighbourhood
-        - number
     CreateAccountResponse:
       title: CreateAccountResponse
       type: object
@@ -1136,6 +698,7 @@ components:
         - account_details
         - created_at
         - inactivated_at
+      description: Response for inactive key
     GetPixKeyResponse:
       title: GetPixKeyResponse
       type: object
@@ -1203,13 +766,14 @@ components:
         - last_name
         - account_number
         - account_type
+        - agency
+      description: ''
     PersonalDocument:
       title: PersonalDocument
       type: string
       description: Define personal document for your person. Choice between CPF for natural person or CNPJ for legal person
       maxLength: 14
       example: '23057061893'
-      pattern: '^(?:(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})|(\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}))$'
     AccountType:
       title: AccountType
       type: string
@@ -1263,16 +827,14 @@ components:
       title: Date
       type: string
       format: date
-      maxLength: 10
     Cellphone:
       title: Cellphone
       type: string
-      pattern: '^\(?[1-9]{2}\)?\s?9[0-9]{4}-?[0-9]{4}$'
+      pattern: '^\+?[0-9]{2,}[1-9]{2}9[0-9]{4}[0-9]{4}$'
     PostalCode:
       title: PostalCode
       type: string
       example: '03333010'
-      pattern: '^\d{5}-\d{3}$'
       maxLength: 8
       description: Field with the customer's address code.
     Agency:
@@ -1280,6 +842,8 @@ components:
       type: string
       description: Code to identify the bank branch
       example: '0001'
+      maxLength: 4
+      minLength: 4
     AccountNumber:
       title: AccountNumber
       type: string
@@ -1303,8 +867,8 @@ components:
         - ACTIVE
         - INACTIVE
         - PROMISE_ACTIVE
-    PersonStaus:
-      title: PersonStaus
+    PersonStatus:
+      title: PersonStatus
       type: string
       enum:
         - PROMISE_ACTIVE
@@ -1316,7 +880,72 @@ components:
           type: string
         message:
           type: string
+        uri:
+          type: string
         details:
           type: object
+      required:
+        - type
+        - message
+        - uri
+        - details
+    PixKeyUpdateRequest:
+      title: PixKeyUpdateRequest
+      type: object
+      properties:
+        key_id:
+          $ref: '#/components/schemas/Ulid'
+        account_type:
+          $ref: '#/components/schemas/AccountType'
+        agency_number:
+          $ref: '#/components/schemas/Agency'
+        account_number:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        key_value:
+          type: string
+      required:
+        - key_id
+        - account_type
+        - agency_number
+        - account_number
+        - first_name
+        - last_name
+        - key_value
+    PixKeyUpdateResponse:
+      title: PixKeyUpdateResponse
+      type: object
+      properties:
+        key_id:
+          $ref: '#/components/schemas/Ulid'
+        key_type:
+          $ref: '#/components/schemas/PixKeyType'
+        key_value:
+          type: string
+        account_type:
+          $ref: '#/components/schemas/AccountType'
+        agency_number:
+          $ref: '#/components/schemas/Agency'
+        account_number:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        pix_key_added_at:
+          $ref: '#/components/schemas/DateTime'
+      required:
+        - key_id
+        - key_type
+        - key_value
+        - account_type
+        - agency_number
+        - account_number
+        - first_name
+        - last_name
+        - pix_key_added_at
   requestBodies: {}
   responses: {}

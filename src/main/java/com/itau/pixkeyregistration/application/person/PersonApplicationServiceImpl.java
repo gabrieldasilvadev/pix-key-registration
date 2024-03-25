@@ -1,7 +1,6 @@
 package com.itau.pixkeyregistration.application.person;
 
 import com.itau.pixkeyregistration.application.web.dto.CreatePersonRequestDto;
-import com.itau.pixkeyregistration.application.web.dto.PersonTypeDto;
 import com.itau.pixkeyregistration.commons.mappers.PersonMapper;
 import com.itau.pixkeyregistration.domain.person.Person;
 import com.itau.pixkeyregistration.domain.person.enums.PersonType;
@@ -9,8 +8,6 @@ import com.itau.pixkeyregistration.domain.person.usecases.CreateLegalPersonUseCa
 import com.itau.pixkeyregistration.domain.person.usecases.CreateNaturalPersonUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
