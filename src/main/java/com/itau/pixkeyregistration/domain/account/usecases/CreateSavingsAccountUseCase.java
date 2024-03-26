@@ -1,4 +1,4 @@
-package com.itau.pixkeyregistration.domain.account.usecases.create;
+package com.itau.pixkeyregistration.domain.account.usecases;
 
 import com.itau.pixkeyregistration.domain.account.Account;
 import com.itau.pixkeyregistration.domain.account.enums.AccountType;

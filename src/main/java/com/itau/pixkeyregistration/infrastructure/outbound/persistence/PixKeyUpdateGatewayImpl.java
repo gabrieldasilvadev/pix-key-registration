@@ -3,7 +3,7 @@ package com.itau.pixkeyregistration.infrastructure.outbound.persistence;
 import com.itau.pixkeyregistration.commons.mappers.PixMapper;
 import com.itau.pixkeyregistration.domain.gateways.PixKeyUpdateGateway;
 import com.itau.pixkeyregistration.domain.pix.PixKey;
-import com.itau.pixkeyregistration.domain.pix.PixKeyUpdate;
+import com.itau.pixkeyregistration.domain.pix.update.PixKeyUpdate;
 import com.itau.pixkeyregistration.infrastructure.outbound.persistence.jpa.repositories.AccountRepository;
 import com.itau.pixkeyregistration.infrastructure.outbound.persistence.jpa.repositories.PixKeyRepository;
 import lombok.RequiredArgsConstructor;

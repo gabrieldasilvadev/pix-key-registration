@@ -1,4 +1,4 @@
-package com.itau.pixkeyregistration.domain.pix;
+package com.itau.pixkeyregistration.domain.pix.update;
 
 import com.itau.pixkeyregistration.domain.account.enums.AccountType;
 import com.itau.pixkeyregistration.domain.pix.enums.PixKeyStatus;

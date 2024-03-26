@@ -7,7 +7,7 @@ import com.itau.pixkeyregistration.application.web.dto.PixKeyRegistrationRespons
 import com.itau.pixkeyregistration.application.web.dto.PixKeyStatusDto;
 import com.itau.pixkeyregistration.application.web.dto.PixKeyTypeDto;
 import com.itau.pixkeyregistration.domain.pix.PixKey;
-import com.itau.pixkeyregistration.domain.pix.PixKeyUpdate;
+import com.itau.pixkeyregistration.domain.pix.update.PixKeyUpdate;
 import com.itau.pixkeyregistration.domain.pix.inactive.PixKeyInactive;
 import com.itau.pixkeyregistration.domain.pix.inactive.PixKeyInactiveAccountDetails;
 import com.itau.pixkeyregistration.infrastructure.outbound.persistence.jpa.entities.AccountTable;
